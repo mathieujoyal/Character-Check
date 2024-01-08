@@ -3,8 +3,6 @@
 const express = require("express");
 const port = 4000
 
-const {} = require("/")
-
 express()
 
     .use(express.json())
