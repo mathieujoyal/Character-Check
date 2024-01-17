@@ -1,8 +1,8 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 const Homepage = () => {
-
     const navigate = useNavigate();
 
     const handleCalculatorButtonClick = () => {

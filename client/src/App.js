@@ -13,7 +13,7 @@ const App = () => {
     <Globalstyles />
       <Header/>
       <Routes>
-        <Route path="/" element={<Homepage />}/>
+        <Route path="/" element={<Homepage /> }/>
         <Route path="/calculator" element={<Calculator />}/>
         <Route path="/encyclopedia" element={<Encyclopedia />}/>
       </Routes>
