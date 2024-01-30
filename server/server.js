@@ -1,11 +1,11 @@
 "use strict";
 
-const express = require("express");
+const express = require("express")
 const port = 4000
 
 const {
-getRaces, getSpecificRace, getSpecificSubrace, getSpecificTrait
-} = require("./handlers");
+getRaces, getSpecificRace, getSpecificSubrace, getSpecificTrait, signUpUser
+} = require("./handlers")
 
 express()
 
@@ -18,10 +18,10 @@ express()
 
 .get("/api/races", async (req, res) => {
     try {
-        const races = await getRaces();
-        res.json(races);
+        const races = await getRaces()
+        res.json(races)
     } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: "Internal Server Error" })
     }
 })
 
@@ -31,6 +31,8 @@ express()
 
 .get("/api/traits/:trait", getSpecificTrait)
 
+.post("/api/signup", signUpUser)
+
 //-------------------------------------------------//
     // Add my endpoints over this line.
 
@@ -38,8 +40,8 @@ express()
         res.status(404).json({
         status: 404,
         message: "Look at you, on the server page and stuff..  ",
-        });
+        })
     })
 
 
-    .listen(port, () => console.log('Listening on port 4000, Get to work.'));
+    .listen(port, () => console.log('Listening on port 4000, Get to work.'))

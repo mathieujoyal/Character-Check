@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import styled from "styled-components"
+import backgroundImage from "./backgrounds/homepagebackground.jpg"
+import divbackgroundImage from "./backgrounds/divbackground.png"
 
 const Calculator = () => {
 const stats = [ "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma" ]
@@ -163,13 +165,38 @@ const calculateAbilityMod = (stat) => {
     }
 
     return (
-        <div>
+        <Wrapper>
             <Title>D&D 5e Point Buy Calculator</Title>
-            <Points>Remaining Points: {availablePoints}</Points>
+            
+            <DropdownContainer>
+                <label htmlFor="raceDropdown">Select Race:</label>
+                    <RaceDropdown id="raceDropdown" value={selectedRace} onChange={(event) => { setSelectedSubrace(""); setSubraceTraits([]); setSelectedRace(encodeURIComponent(event.target.value))}}>
+                    <option value="" disabled> Select a race </option>
+                        {races.map((race) => (
+                            <option key={race.index} value={race.name}> {race.name} </option>
+                        )
+                    )}
+                </RaceDropdown>
+            </DropdownContainer>
+
+            {raceInfo && raceInfo.subraces && raceInfo.subraces.length > 0 && (
+                <DropdownContainer>
+                <label htmlFor="subraceDropdown">Select Subrace:</label>
+                    <select id="subraceDropdown" value={selectedSubrace} onChange={(event) => setSelectedSubrace(event.target.value)}>
+                    <option value="" disabled> Pick a subrace </option>
+                    {raceInfo.subraces.map(subrace => (
+                    <option key={subrace.index} value={subrace.index}> {subrace.name} </option>
+                    ))}
+                </select>
+                </DropdownContainer>
+                    )}
+
             <StatContainer>
+                <Points>Remaining Points: {availablePoints}</Points>
                 {stats.map((stat) => (
                     <AttributeDiv key={stat}>
                         <Attribute>{`${stat.charAt(0).toUpperCase()}${stat.slice(1)}:`}</Attribute>
+
                         <StatButtons>
                             <MinusButton onClick={() => handleSpendPoints(stat, "subtract")} 
                             disabled={availablePoints >= 27 || 
@@ -182,6 +209,7 @@ const calculateAbilityMod = (stat) => {
                             (availablePoints === 1 && statPoints[stat] === 13)  
                             } > + </PlusButton>
                         </StatButtons>
+
                         <StatCalculation>
                             Total Calculation: {statPoints[stat]} + {calculatedStatPoints[stat] - 8} = {calculatedStatPoints[stat] + (statPoints[stat] - 8) } →
                         </StatCalculation>
@@ -189,28 +217,8 @@ const calculateAbilityMod = (stat) => {
                     </AttributeDiv>
                 ))}
             </StatContainer>
+
             <RaceDiv>
-            <DropdownContainer>
-                <label htmlFor="raceDropdown">Select Race:</label>
-                <RaceDropdown id="raceDropdown" value={selectedRace} onChange={(event) => { setSelectedSubrace(""); setSubraceTraits([]); setSelectedRace(encodeURIComponent(event.target.value))}}>
-                    <option value="" disabled> Select a race </option>
-                        {races.map((race) => (
-                            <option key={race.index} value={race.name}> {race.name} </option>
-                        )
-                    )}
-                </RaceDropdown>
-            </DropdownContainer>
-            {raceInfo && raceInfo.subraces && raceInfo.subraces.length > 0 && (
-                <DropdownContainer>
-                <label htmlFor="subraceDropdown">Select Subrace:</label>
-                    <select id="subraceDropdown" value={selectedSubrace} onChange={(event) => setSelectedSubrace(event.target.value)}>
-                        <option value="" disabled> Pick a subrace </option>
-                        {raceInfo.subraces.map(subrace => (
-                            <option key={subrace.index} value={subrace.index}> {subrace.name} </option>
-                        ))}
-                    </select>
-                </DropdownContainer>
-                    )}
                 {raceInfo && (
                     <RaceInfoContainer>
                     <H2>{raceInfo.name}'s Information</H2>
@@ -222,9 +230,6 @@ const calculateAbilityMod = (stat) => {
                     <div><BoldSpan>Attribute bonuses:</BoldSpan>
                         {abilityBonuses.map((bonus, index) => ( <div key={index}> {bonus.abilityScoreName}: {bonus.bonusValue} </div> ))}
                     </div>
-                    {/* more info to be added */}
-                    </RaceInfoContainer>
-                )}
                     {traits.length > 0 && (
                     <div>
                         <H2>{raceInfo.name}'s Trait</H2>
@@ -236,17 +241,16 @@ const calculateAbilityMod = (stat) => {
                         }
                     </div>
                 )}
+                    </RaceInfoContainer>
+                )}
+                    
                 {raceInfo && selectedSubrace && (
-                    <RaceInfoContainer>
+                    <SubRaceInfoContainer>
                     <H2>{selectedSubrace}'s Particularities</H2>
                     <Para><BoldSpan>Speed:</BoldSpan> {raceInfo.speed}</Para>
-                    <div>
                         <BoldSpan>Attribute bonuses:</BoldSpan>
                         {subraceAbilityBonuses.map((bonus, index) => (<div key={index}>{bonus.abilityScoreName}: {bonus.bonusValue}</div>))}
-                        </div>
-                    </RaceInfoContainer>
-                    )}
-                    {subraceTraits.length > 0 && (
+                        {subraceTraits.length > 0 && (
                         <div>
                             <H2>{selectedSubrace}'s Traits</H2>
                                 {subraceTraits.map((subraceTrait, index) => (
@@ -257,27 +261,53 @@ const calculateAbilityMod = (stat) => {
                             }
                         </div>
                     )}
+                    </SubRaceInfoContainer>
+                    )}
                 </RaceDiv>
             <HomeButton onClick={handleHomeButtonClick} > Home </HomeButton>
-        </div>
+        </Wrapper>
     )
 }
 
-const Title = styled.h1`
+const Wrapper = styled.div`
+background-image: url(${backgroundImage});
+min-height: calc(100vh - 70px);
+background-size: cover;
+background-position: center;
+box-shadow: inset 0px 20px 12px 2px black;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+`
 
+const Title = styled.h1`
+font-size: 30px;
+margin-top: 50px;
 `
 
 const Points = styled.p`
-
+text-align: center;
+padding-bottom: 20px;
 `
 
 const StatContainer = styled.div`
+background-image: url(${divbackgroundImage});
+border: 2px solid #ccaa00;
+box-shadow: 0px 5px 12px 5px black;
+height: 70px;
+color: white;
+min-height: 260px;
+padding: 20px;
 display: flex;
 flex-direction: column;
+justify-content: center ;
 margin-top: 20px;
+text-align: center;
 `
 
 const StatCalculation = styled.p`
+margin-right : 20px;
 margin-left: 100px;
 `
 
@@ -298,19 +328,38 @@ margin-left: 10px;
 `
 
 const StatModifier = styled.span`
-
+font-size: 20px;
+font-weight: bold;
 `
 
 const MinusButton = styled.button`
-
+background: var(--color-gold);
+cursor:pointer;
+transition: 0.2s;
+box-shadow: 0 4px 8px rgba(218, 165, 32, 0.5), 0 0 20px rgba(255, 215, 0, 0.5);
+border: none;
+&:hover{
+    box-shadow: 0 1px 2px rgba(218, 165, 32, 0.5), 0 0 4px rgba(255, 215, 0, 0.5);
+    filter: brightness(90%)
+}
 `
 
 const PlusButton = styled.button`
-
+background: var(--color-silver);
+cursor: pointer;
+transition: 0.2s;
+&:hover{
+    opacity: 70%;
+box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
 `
 
 const StatButtons = styled.div`
 display: flex;
+flex-direction: row;
+align-items: center;  
+margin-left: 10px; 
+margin-right: 10px;
 `
 
 const RaceDiv = styled.div`
@@ -326,7 +375,23 @@ margin-left: 10px;
 `
 
 const RaceInfoContainer = styled.div`
-margin-top: 20px;
+background-image: url(${divbackgroundImage});
+border: 2px solid #ccaa00;
+box-shadow: 0px 5px 12px 5px black;
+height: 70px;
+color: white;
+min-height: 450px;
+margin: 30px;
+`
+
+const SubRaceInfoContainer = styled.div`
+background-image: url(${divbackgroundImage});
+border: 2px solid #ccaa00;
+box-shadow: 0px 5px 12px 5px black;
+height: 70px;
+color: white;
+min-height: 270px;
+margin: 30px;
 `
 
 const H2 = styled.h2`
@@ -334,7 +399,7 @@ const H2 = styled.h2`
 ` 
 
 const Para = styled.p`
-
+margin: 10px 0px;
 `
 
 const BoldSpan = styled.span`
