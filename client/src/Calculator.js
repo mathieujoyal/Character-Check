@@ -282,7 +282,7 @@ justify-content: center;
 `
 
 const Title = styled.h1`
-font-size: 30px;
+font-size: 31px;
 margin-top: 50px;
 `
 
