@@ -48,7 +48,7 @@ const getSpecificSubrace = async (req, res) => {
 }
 
 const getSpecificTrait = async (req, res) => {
-    const { trait } = req.params;  // Corrected parameter name
+    const { trait } = req.params;
 
     try {
         if (!trait) {
