@@ -1,12 +1,23 @@
+import React from "react"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Globalstyles from "./Globalstyles";
+import Homepage from "./Homepage";
+import Header from "./Header";
+import Calculator from "./Calculator";
+import Encyclopedia from "./Encyclopedia";
 
-function App() {
-
-
+const App = () => {
   
   return (
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <BrowserRouter>
+    <Globalstyles />
+      <Header/>
+      <Routes>
+        <Route path="/" element={<Homepage /> }/>
+        <Route path="/calculator" element={<Calculator />}/>
+        <Route path="/encyclopedia" element={<Encyclopedia />}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
