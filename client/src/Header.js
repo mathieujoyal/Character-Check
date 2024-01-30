@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import styled from "styled-components"
-import backgroundImage from "./backgrounds/divbackground.png"
+import backgroundImage from "./Backgrounds/divbackground.png"
 import Globalstyles from "./Globalstyles"
 
 const Header = () => {
