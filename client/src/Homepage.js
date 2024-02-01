@@ -1,10 +1,32 @@
 import styled from "styled-components"
-import { useNavigate } from "react-router-dom";
-import React from "react";
-import backgroundImage from "./Backgrounds/homepagebackground.jpg"
+import { useNavigate } from "react-router-dom"
+import React, { useState, useEffect } from "react"
+import backgroundImage from "./backgrounds/homepagebackground.jpg"
 
 const Homepage = () => {
     const navigate = useNavigate()
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    useEffect(() => {
+    const storedLoggedInStatus = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(storedLoggedInStatus === "true");
+}, []);
+
+const handleCreateCharButtonClick = () => {
+    if (isLoggedIn) {
+        navigate("/sheetmaker")
+    } else {
+        navigate("/login");
+    }
+};
+
+const handleLoadCharButtonClick = () => {
+    if (isLoggedIn) {
+        navigate("/sheetloader")
+    } else {
+        navigate("/login");
+    }
+};
 
     const handleCalculatorButtonClick = () => {
         navigate("/calculator");
@@ -17,10 +39,10 @@ const Homepage = () => {
     return (
         <Wrapper>
             <H2>Brief Description of what this site can offer.</H2>
-            <CreateCharBtn>Create A Character</CreateCharBtn>
-            <Para>Must be logged in!</Para>
-            <LoadCharBtn>Load A Character</LoadCharBtn>
-            <Para>Must be logged in!</Para>
+            <CreateCharBtn onClick={handleCreateCharButtonClick}>Create A Character</CreateCharBtn>
+            <Para>{isLoggedIn ? "Create a new character" : "Must be logged in!"}</Para>
+            <LoadCharBtn onClick={handleLoadCharButtonClick}>Load A Character</LoadCharBtn>
+            <Para>{isLoggedIn ? "Load an existing character" : "Must be logged in!"}</Para>
             <CalculatorButton onClick={handleCalculatorButtonClick}> Point-buy Calculator </CalculatorButton>
             <EncyclopediaButton onClick={handleEncyclopediaButtonClick}> Encyclopedia </EncyclopediaButton>
         </Wrapper>

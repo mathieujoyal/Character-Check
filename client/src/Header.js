@@ -1,30 +1,54 @@
-import React, { useState, useEffect } from "react"
-import { useNavigate } from "react-router"
-import styled from "styled-components"
-import backgroundImage from "./Backgrounds/divbackground.png"
-import Globalstyles from "./Globalstyles"
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import styled from "styled-components";
+import backgroundImage from "./backgrounds/divbackground.png";
 
 const Header = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [account, setaccount] = useState("");
+
+    useEffect(() => {
+        const storedLoggedInStatus = localStorage.getItem("isLoggedIn");
+        const storedaccount = localStorage.getItem("account");
+        setIsLoggedIn(storedLoggedInStatus === "true");
+        setaccount(storedaccount || "");
+    }, []);
 
     const handleLoginButtonClick = () => {
         navigate("/login");
     };
 
-    const handleSignupButtonClick = () => {
-        navigate("/signup");
+    const handleRegisterButtonClick = () => {
+        navigate("/register");
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("account");
+        setIsLoggedIn(false);
+        setaccount("");
+        navigate("/");
+        window.location.reload()
     };
 
     return (
         <Wrapper>
             <H1>Character Check</H1>
-            <ButtonDiv>
-                <Login onClick={handleLoginButtonClick}>Login</Login>
-                <Signup onClick={handleSignupButtonClick}>Sign in</Signup>
-            </ButtonDiv>
+            {isLoggedIn ? (
+                <UserInfo>
+                    <span>Hello, {account}!</span>
+                    <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+                </UserInfo>
+            ) : (
+                <ButtonDiv>
+                    <Login onClick={handleLoginButtonClick}>Login</Login>
+                    <Register onClick={handleRegisterButtonClick}>Register</Register>
+                </ButtonDiv>
+            )}
         </Wrapper>
-    )
-}
+    );
+};
 
 const Wrapper = styled.div`
 background-image: url(${backgroundImage});
@@ -43,7 +67,7 @@ color: lightgray;
 `
 
 const ButtonDiv = styled.div`
-position: fixed;
+position: absolute;
 right: 0px;
 `
 
@@ -51,8 +75,24 @@ const Login = styled.button`
 
 `
 
-const Signup = styled.button`
+const Register = styled.button`
 
 `
+
+const UserInfo = styled.div`
+    color: lightgray;
+    font-size: 16px;
+
+    span {
+        margin-right: 10px;
+    }
+`
+
+const LogoutButton = styled.button`
+    background: none;
+    border: none;
+    color: lightgray;
+    cursor: pointer;
+`;
 
 export default Header

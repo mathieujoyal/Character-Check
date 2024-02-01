@@ -6,8 +6,9 @@ import Header from "./Header"
 import Calculator from "./Calculator"
 import Encyclopedia from "./Encyclopedia"
 import Login from "./Login"
-import Signup from "./Signup"
+import Register from "./Register"
 import SheetMaker from "./SheetMaker"
+import SheetLoader from "./SheetLoader"
 
 const App = () => {
 
@@ -20,8 +21,9 @@ const App = () => {
         <Route path="/calculator" element={<Calculator />}/>
         <Route path="/encyclopedia" element={<Encyclopedia />}/>
         <Route path="/login" element={<Login />}/>
-        <Route path="/signup" element={<Signup />}/>
+        <Route path="/register" element={<Register />}/>
         <Route path="/sheetmaker" element={<SheetMaker />}/>
+        <Route path="/sheetloader" element={<SheetLoader />}/>
       </Routes>
     </BrowserRouter>
   );

@@ -4,6 +4,34 @@ const { MongoClient } = require("mongodb")
 const client = new MongoClient("mongodb+srv://mathieujoyal96:shrek@cluster0.vhhwhoa.mongodb.net/?retryWrites=true&w=majority", { useUnifiedTopology: true })
 const { v4: uuidv4 } = require("uuid")
 
+const options = { useUnifiedTopology: true };
+const MONGO_URI = "mongodb+srv://mathieujoyal96:admincheck@charactercheck.4y7exrh.mongodb.net/?retryWrites=true&w=majority"
+
+const registerUser = async (req, res) => {
+    const { account, userPassword } = req.body
+
+    if (!account || !userPassword) {
+        return res.status(400).json({ error: 'account and userPassword are required' })
+    }
+    let client
+    try {
+        client = new MongoClient(MONGO_URI, options)
+        await client.connect()
+        const existingUser = await client.db('CharacterCheck').collection('Accounts').findOne({ account })
+        if (existingUser) {
+            return res.status(400).json({ error: 'account already exists' })
+        }
+
+        const userId = uuidv4();
+        await client.db('CharacterCheck').collection('Accounts').insertOne({ userId, account, userPassword })
+
+        res.status(201).json({ message: 'User created successfully' })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' })
+    }
+}
+
 const getRaces = async () => {
     try {
         const response = await fetch("https://www.dnd5eapi.co/api/races")
@@ -67,5 +95,34 @@ const getSpecificTrait = async (req, res) => {
     }
 }
 
+const loginUser = async (req, res) => {
+    const { account, userPassword } = req.body;
 
-module.exports = { getRaces, getSpecificRace, getSpecificSubrace, getSpecificTrait }
+    if (!account || !userPassword) {
+        return res.status(400).json({ error: 'account and userPassword are required' });
+    }
+
+    let client;
+    try {
+        client = new MongoClient(MONGO_URI, options);
+        await client.connect();
+
+        const user = await client.db('CharacterCheck').collection('Accounts').findOne({ account, userPassword });
+
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        res.status(200).json({ message: 'Login successful' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    } finally {
+        if (client) {
+            await client.close();
+        }
+    }
+};
+
+
+module.exports = { getRaces, getSpecificRace, getSpecificSubrace, getSpecificTrait, registerUser, loginUser }

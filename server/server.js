@@ -4,8 +4,8 @@ const express = require("express");
 const port = 4000
 
 const {
-getRaces, getSpecificRace, getSpecificSubrace, getSpecificTrait
-} = require("./handlers");
+getRaces, getSpecificRace, getSpecificSubrace, getSpecificTrait, registerUser, loginUser
+} = require("./handlers")
 
 express()
 
@@ -30,6 +30,10 @@ express()
 .get("/api/subraces/:subraceName", getSpecificSubrace)
 
 .get("/api/traits/:trait", getSpecificTrait)
+
+.post("/api/register", registerUser)
+
+.post("/api/login", loginUser)
 
 //-------------------------------------------------//
     // Add my endpoints over this line.
