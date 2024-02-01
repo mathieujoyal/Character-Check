@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router"
 import styled from "styled-components"
-import backgroundImage from "./backgrounds/homepagebackground.jpg"
+import backgroundImage from "./Backgrounds/homepagebackground.jpg"
 
 const Login = () => {
     const [ isLoggedIn, setIsLoggedIn ] = useState(false)

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import styled from "styled-components"
-import backgroundImage from "./backgrounds/homepagebackground.jpg"
-import divbackgroundImage from "./backgrounds/divbackground.png"
+import backgroundImage from "./Backgrounds/homepagebackground.jpg"
+import divbackgroundImage from "./Backgrounds/divbackground.png"
+
 
 const Calculator = () => {
 const stats = [ "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma" ]
@@ -19,6 +20,7 @@ const [ availablePoints, setAvailablePoints ] = useState(27)
 const [ statPoints, setStatPoints ] = useState({ strength: 8, dexterity: 8, constitution: 8, intelligence: 8, wisdom: 8, charisma: 8 })
 const [ calculatedStatPoints, setCalculatedStatPoints ] = useState({ strength: 8, dexterity: 8, constitution: 8, intelligence: 8, wisdom: 8, charisma: 8 })
 
+
 useEffect(() => {
     fetch("/api/races")
         .then((response) => response.json())
@@ -27,8 +29,11 @@ useEffect(() => {
 }, [])
 
 
+
+
 useEffect(() => {
     setCalculatedStatPoints({ strength: 8, dexterity: 8, constitution: 8, intelligence: 8, wisdom: 8, charisma: 8 })
+
 
     if (selectedRace) {
     fetch(`/api/races/${encodeURIComponent(selectedRace)}`)
@@ -45,12 +50,15 @@ useEffect(() => {
             cha: 'charisma'
             }
 
+
             const bonuses = data.ability_bonuses.map((bonus) => ({
                 abilityScoreName: abilityScoreMap[bonus.ability_score.index],
                 bonusValue: bonus.bonus,
             }))
 
+
             setAbilityBonuses(bonuses)
+
 
             if (data.ability_bonuses && Array.isArray(data.ability_bonuses)) {
             data.ability_bonuses.forEach((bonus) => {
@@ -64,12 +72,14 @@ useEffect(() => {
             })
         }
 
+
         if (data.traits && Array.isArray(data.traits)) {
             Promise.all(data.traits.map(trait => fetch(`/api/traits/${trait.index}`)))
                 .then(responses => Promise.all(responses.map(response => response.json())))
                 .then((traitsData) => setTraits(traitsData))
                 .catch((traitsError) => console.error('Error fetching dragonborn traits:', traitsError))
             }
+
 
         if (selectedSubrace) {
             fetch(`/api/subraces/${encodeURIComponent(selectedSubrace)}`)
@@ -82,12 +92,15 @@ useEffect(() => {
                     .then((subraceData) => {
                 console.log('Subrace Info:', subraceData)
 
+
                 const subraceBonuses = subraceData.ability_bonuses.map((bonus) => ({
                     abilityScoreName: abilityScoreMap[bonus.ability_score.index],
                     bonusValue: bonus.bonus,
                 }));
 
+
                 setSubraceAbilityBonuses(subraceBonuses)
+
 
                 if (subraceData.racial_traits && Array.isArray(subraceData.racial_traits)) {
                     Promise.all(subraceData.racial_traits.map(trait => fetch(`/api/traits/${trait.index}`)))
@@ -95,6 +108,7 @@ useEffect(() => {
                         .then((subraceTraitsData) => setSubraceTraits(subraceTraitsData))
                         .catch((traitsError) => console.error('Error fetching subrace traits:', traitsError))
                 }
+
 
                 if (subraceData.ability_bonuses && Array.isArray(subraceData.ability_bonuses)) {
                     subraceData.ability_bonuses.forEach((bonus) => {
@@ -117,6 +131,7 @@ useEffect(() => {
     }
 }, [selectedRace, selectedSubrace])
 
+
 const handleSpendPoints = (stat, attributeChange) => {
 // This statement handles any change that are made to stats that are between 8 and 13
     if ((attributeChange === "add" && statPoints[stat] < 13) || (attributeChange === "subtract" && statPoints[stat] > 8)) {
@@ -128,6 +143,7 @@ const handleSpendPoints = (stat, attributeChange) => {
             (prevAvailablePoints) => attributeChange === "add" ? prevAvailablePoints - 1 : prevAvailablePoints + 1
         )
     }
+
 
 // This statement handles any change that are made to stats that are at 13, 14 or 15.
     if ((attributeChange === "add" && statPoints[stat] >= 13) ||
@@ -142,10 +158,11 @@ const handleSpendPoints = (stat, attributeChange) => {
 }
 }
 
+
 // This function sets up the ability modifer that show up on screen.
 const calculateAbilityMod = (stat) => {
     const totalStatPoints = calculatedStatPoints[stat] + (statPoints[stat] - 8)
-    
+   
     if (totalStatPoints === 8 || totalStatPoints === 9) {
         return "-1"
     } else if (totalStatPoints === 10 || totalStatPoints === 11) {
@@ -159,15 +176,17 @@ const calculateAbilityMod = (stat) => {
     }
 }
 
+
 // Simple useNavigate back to the homepage
     const handleHomeButtonClick = () => {
         navigate("/")
     }
 
+
     return (
         <Wrapper>
             <Title>D&D 5e Point Buy Calculator</Title>
-            
+           
             <DropdownContainer>
                 <label htmlFor="raceDropdown">Select Race:</label>
                     <RaceDropdown id="raceDropdown" value={selectedRace} onChange={(event) => { setSelectedSubrace(""); setSubraceTraits([]); setSelectedRace(encodeURIComponent(event.target.value))}}>
@@ -178,6 +197,7 @@ const calculateAbilityMod = (stat) => {
                     )}
                 </RaceDropdown>
             </DropdownContainer>
+
 
             {raceInfo && raceInfo.subraces && raceInfo.subraces.length > 0 && (
                 <DropdownContainer>
@@ -191,24 +211,27 @@ const calculateAbilityMod = (stat) => {
                 </DropdownContainer>
                     )}
 
+
             <StatContainer>
                 <Points>Remaining Points: {availablePoints}</Points>
                 {stats.map((stat) => (
                     <AttributeDiv key={stat}>
                         <Attribute>{`${stat.charAt(0).toUpperCase()}${stat.slice(1)}:`}</Attribute>
 
+
                         <StatButtons>
-                            <MinusButton onClick={() => handleSpendPoints(stat, "subtract")} 
-                            disabled={availablePoints >= 27 || 
+                            <MinusButton onClick={() => handleSpendPoints(stat, "subtract")}
+                            disabled={availablePoints >= 27 ||
                             statPoints[stat] === 8 }> - </MinusButton>
                             <StatValue> {statPoints[stat]}</StatValue>
                             <PlusButton onClick={() => handleSpendPoints(stat, "add")}
                             disabled={availablePoints <= 0 ||
-                            statPoints[stat] === 15 || 
-                            (availablePoints === 1 && statPoints[stat] === 14) || 
+                            statPoints[stat] === 15 ||
+                            (availablePoints === 1 && statPoints[stat] === 14) ||
                             (availablePoints === 1 && statPoints[stat] === 13)  
                             } > + </PlusButton>
                         </StatButtons>
+
 
                         <StatCalculation>
                             Total Calculation: {statPoints[stat]} + {calculatedStatPoints[stat] - 8} = {calculatedStatPoints[stat] + (statPoints[stat] - 8) } →
@@ -217,6 +240,7 @@ const calculateAbilityMod = (stat) => {
                     </AttributeDiv>
                 ))}
             </StatContainer>
+
 
             <RaceDiv>
                 {raceInfo && (
@@ -243,7 +267,7 @@ const calculateAbilityMod = (stat) => {
                 )}
                     </RaceInfoContainer>
                 )}
-                    
+                   
                 {raceInfo && selectedSubrace && (
                     <SubRaceInfoContainer>
                     <H2>{selectedSubrace}'s Particularities</H2>
@@ -269,6 +293,7 @@ const calculateAbilityMod = (stat) => {
     )
 }
 
+
 const Wrapper = styled.div`
 background-image: url(${backgroundImage});
 min-height: calc(100vh - 70px);
@@ -281,15 +306,18 @@ align-items: center;
 justify-content: center;
 `
 
+
 const Title = styled.h1`
 font-size: 31px;
 margin-top: 50px;
 `
 
+
 const Points = styled.p`
 text-align: center;
 padding-bottom: 20px;
 `
+
 
 const StatContainer = styled.div`
 background-image: url(${divbackgroundImage});
@@ -306,10 +334,12 @@ margin-top: 20px;
 text-align: center;
 `
 
+
 const StatCalculation = styled.p`
 margin-right : 20px;
 margin-left: 100px;
 `
+
 
 const AttributeDiv = styled.div`
 display: flex;
@@ -317,9 +347,11 @@ align-items: center;
 margin-bottom: 10px;
 `
 
+
 const Attribute = styled.div`
 margin-right: 10px;
 `
+
 
 const StatValue = styled.div`
 font-weight: bold;
@@ -327,10 +359,12 @@ margin-right: 10px;
 margin-left: 10px;
 `
 
+
 const StatModifier = styled.span`
 font-size: 20px;
 font-weight: bold;
 `
+
 
 const MinusButton = styled.button`
 background: var(--color-gold);
@@ -344,6 +378,7 @@ border: none;
 }
 `
 
+
 const PlusButton = styled.button`
 background: var(--color-silver);
 cursor: pointer;
@@ -354,25 +389,30 @@ box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 `
 
+
 const StatButtons = styled.div`
 display: flex;
 flex-direction: row;
 align-items: center;  
-margin-left: 10px; 
+margin-left: 10px;
 margin-right: 10px;
 `
+
 
 const RaceDiv = styled.div`
 margin-top: 20px;
 `
 
+
 const DropdownContainer = styled.div`
 margin-top: 20px;
 `
 
+
 const RaceDropdown = styled.select`
 margin-left: 10px;
 `
+
 
 const RaceInfoContainer = styled.div`
 background-image: url(${divbackgroundImage});
@@ -384,6 +424,7 @@ min-height: 450px;
 margin: 30px;
 `
 
+
 const SubRaceInfoContainer = styled.div`
 background-image: url(${divbackgroundImage});
 border: 2px solid #ccaa00;
@@ -394,20 +435,27 @@ min-height: 270px;
 margin: 30px;
 `
 
+
 const H2 = styled.h2`
 
-` 
+
+`
+
 
 const Para = styled.p`
 margin: 10px 0px;
 `
 
+
 const BoldSpan = styled.span`
 font-weight: bold;
 `
 
+
 const HomeButton = styled.button`
 
+
 `
+
 
 export default Calculator

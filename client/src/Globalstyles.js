@@ -49,5 +49,4 @@ q:before, q:after {
     content: '';
     content: none;
 }
-
 `
