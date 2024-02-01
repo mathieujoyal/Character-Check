@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 import React, { useState, useEffect } from "react"
-import backgroundImage from "./backgrounds/homepagebackground.jpg"
+import backgroundImage from "./Backgrounds/homepagebackground.jpg"
 
 const Homepage = () => {
     const navigate = useNavigate()
