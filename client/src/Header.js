@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
-import styled from "styled-components";
-import backgroundImage from "./Backgrounds/divbackground.png";
+import React, { useState, useEffect } from "react"
+import { useNavigate } from "react-router"
+import styled from "styled-components"
+import backgroundImage from "./Backgrounds/divbackground.png"
 
 const Header = () => {
-    const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [account, setaccount] = useState("");
+    const navigate = useNavigate()
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [account, setaccount] = useState("")
 
     useEffect(() => {
-        const storedLoggedInStatus = localStorage.getItem("isLoggedIn");
-        const storedaccount = localStorage.getItem("account");
-        setIsLoggedIn(storedLoggedInStatus === "true");
-        setaccount(storedaccount || "");
-    }, []);
+        const storedLoggedInStatus = localStorage.getItem("isLoggedIn")
+        const storedaccount = localStorage.getItem("account")
+        setIsLoggedIn(storedLoggedInStatus === "true")
+        setaccount(storedaccount || "")
+    }, [])
 
     const handleLoginButtonClick = () => {
-        navigate("/login");
-    };
+        navigate("/login")
+    }
 
     const handleRegisterButtonClick = () => {
-        navigate("/register");
-    };
+        navigate("/register")
+    }
 
     const handleLogout = () => {
-        localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("account");
-        setIsLoggedIn(false);
-        setaccount("");
-        navigate("/");
+        localStorage.removeItem("isLoggedIn")
+        localStorage.removeItem("account")
+        setIsLoggedIn(false)
+        setaccount("")
+        navigate("/")
         window.location.reload()
-    };
+    }
 
     return (
         <Wrapper>
@@ -47,8 +47,8 @@ const Header = () => {
                 </ButtonDiv>
             )}
         </Wrapper>
-    );
-};
+    )
+}
 
 const Wrapper = styled.div`
 background-image: url(${backgroundImage});
@@ -80,19 +80,19 @@ const Register = styled.button`
 `
 
 const UserInfo = styled.div`
-    color: lightgray;
-    font-size: 16px;
+color: lightgray;
+font-size: 16px;
 
-    span {
-        margin-right: 10px;
-    }
+span {
+    margin-right: 10px;
+}
 `
 
 const LogoutButton = styled.button`
-    background: none;
-    border: none;
-    color: lightgray;
-    cursor: pointer;
-`;
+background: none;
+border: none;
+color: lightgray;
+cursor: pointer;
+`
 
 export default Header

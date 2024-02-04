@@ -1,41 +1,17 @@
 "use strict"
 
-const { MongoClient } = require("mongodb")
-const client = new MongoClient("mongodb+srv://mathieujoyal96:shrek@cluster0.vhhwhoa.mongodb.net/?retryWrites=true&w=majority", { useUnifiedTopology: true })
+const { MongoClient, ObjectId  } = require("mongodb")
 const { v4: uuidv4 } = require("uuid")
 
 const options = { useUnifiedTopology: true };
 const MONGO_URI = "mongodb+srv://mathieujoyal96:admincheck@charactercheck.4y7exrh.mongodb.net/?retryWrites=true&w=majority"
 
-const registerUser = async (req, res) => {
-    const { account, userPassword } = req.body
-
-    if (!account || !userPassword) {
-        return res.status(400).json({ error: 'account and userPassword are required' })
-    }
-    let client
-    try {
-        client = new MongoClient(MONGO_URI, options)
-        await client.connect()
-        const existingUser = await client.db('CharacterCheck').collection('Accounts').findOne({ account })
-        if (existingUser) {
-            return res.status(400).json({ error: 'account already exists' })
-        }
-
-        const userId = uuidv4();
-        await client.db('CharacterCheck').collection('Accounts').insertOne({ userId, account, userPassword })
-
-        res.status(201).json({ message: 'User created successfully' })
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' })
-    }
-}
+const generateTemporaryPassword = require('./PasswordGeneration')
 
 const getRaces = async () => {
     try {
         const response = await fetch("https://www.dnd5eapi.co/api/races")
-        const data = await response.json();
+        const data = await response.json()
         return data
     } catch (error) {
         console.error("Error, could not retrieve races", error)
@@ -60,69 +36,241 @@ const getSpecificRace = async (req, res) => {
 }
 
 const getSpecificSubrace = async (req, res) => {
-    const { subraceName } = req.params;
+    const { subraceName } = req.params
 
     try {
-        const response = await fetch(`https://www.dnd5eapi.co/api/subraces/${subraceName.toLowerCase()}`);
+        const response = await fetch(`https://www.dnd5eapi.co/api/subraces/${subraceName.toLowerCase()}`)
         if (!response.ok) {
-            throw new Error(`Error fetching subrace ${subraceName} information: ${response.statusText}`);
+            throw new Error(`Error fetching subrace ${subraceName} information: ${response.statusText}`)
         }
-            const data = await response.json();
-            res.json(data);
+            const data = await response.json()
+            res.json(data)
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error(error)
+        res.status(500).json({ error: "Internal Server Error" })
     }
 }
 
 const getSpecificTrait = async (req, res) => {
-    const { trait } = req.params;
+    const { trait } = req.params
 
     try {
         if (!trait) {
-            throw new Error("Trait parameter is missing or undefined.");
+            throw new Error("Trait parameter is missing or undefined.")
         }
 
-        const response = await fetch(`https://www.dnd5eapi.co/api/traits/${trait.toLowerCase()}`);
+        const response = await fetch(`https://www.dnd5eapi.co/api/traits/${trait.toLowerCase()}`)
         if (!response.ok) {
-            throw new Error(`Error fetching ${trait}'s information: ${response.statusText}`);
+            throw new Error(`Error fetching ${trait}'s information: ${response.statusText}`)
         }
-        const data = await response.json();
-        res.json(data);
+        const data = await response.json()
+        res.json(data)
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error(error)
+        res.status(500).json({ error: "Internal Server Error" })
+    }
+}
+
+const registerUser = async (req, res) => {
+    const { account, userPassword, userEmail } = req.body
+
+    if (!account || !userPassword) {
+        return res.status(400).json({ error: 'account and userPassword are required' })
+    }
+
+    let client
+    try {
+        client = new MongoClient(MONGO_URI, options)
+        await client.connect()
+    
+        const existingUser = await client.db('CharacterCheck').collection('Accounts').findOne({ account })
+        if (existingUser) {
+            return res.status(400).json({ error: 'account already exists' })
+        }
+    
+        const userId = uuidv4()
+        
+        await client.db('CharacterCheck').collection('Accounts').insertOne({
+            userId,
+            account,
+            userPassword,
+            userEmail,
+            savedSheets: []
+        })
+    
+        res.status(201).json({ message: 'User created successfully' })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error' })
     }
 }
 
 const loginUser = async (req, res) => {
-    const { account, userPassword } = req.body;
+    const { account, userPassword } = req.body
 
     if (!account || !userPassword) {
-        return res.status(400).json({ error: 'account and userPassword are required' });
+        return res.status(400).json({ error: 'account and userPassword are required' })
     }
 
     let client;
     try {
-        client = new MongoClient(MONGO_URI, options);
-        await client.connect();
+        client = new MongoClient(MONGO_URI, options)
+        await client.connect()
 
-        const user = await client.db('CharacterCheck').collection('Accounts').findOne({ account, userPassword });
+        const user = await client.db('CharacterCheck').collection('Accounts').findOne({ account, userPassword })
 
         if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ error: 'Invalid credentials' })
         }
 
-        res.status(200).json({ message: 'Login successful' });
+        res.status(200).json({ message: 'Login successful', userId: user.userId })
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    } finally {
-        if (client) {
-            await client.close();
-        }
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error' })
+    } 
+}
+
+const saveCharacterSheet = async (req, res) => {
+    const { characterName, characterClass, subclass, race, level } = req.body
+
+    if (!characterName || !characterClass || !subclass || !race || !level) {
+        return res.status(400).json({ error: 'All fields are required' })
     }
-};
 
+    let client
+    try {
+        client = new MongoClient(MONGO_URI, options)
+        await client.connect()
 
-module.exports = { getRaces, getSpecificRace, getSpecificSubrace, getSpecificTrait, registerUser, loginUser }
+        const userId = req.headers.authorization
+
+        const result = await client.db('CharacterCheck').collection('Sheets').insertOne({
+        userId,
+        characterName,
+        characterClass,
+        subclass,
+        race,
+        level
+        })
+
+        const sheetId = result.insertedId
+
+        await client.db('CharacterCheck').collection('Accounts').updateOne(
+            { userId },
+            { $push: { savedSheets: sheetId } }
+        )
+
+        res.status(201).json({ message: 'Character sheet saved successfully', sheetId })
+    } catch (error) {
+        console.error('Error during sheet save:', error)
+        res.status(500).json({ error: 'Internal server error' })
+    }
+}
+
+const getSheetsByUserId = async (userId) => {
+    try {
+        const client = new MongoClient(MONGO_URI, options)
+        await client.connect()
+
+        const user = await client.db('CharacterCheck').collection('Accounts').findOne({ userId })
+        if (!user) {
+            return null
+        }
+
+        const sheets = await client.db('CharacterCheck').collection('Sheets').find({_id: { $in: user.savedSheets },}).toArray()
+
+        return sheets
+    } catch (error) {
+        console.error('Error fetching sheets:', error)
+        throw error
+    }
+}
+
+const getSheetDetails = async (req, res) => {
+    const sheetId = req.params.sheetId
+
+    try {
+        const client = new MongoClient(MONGO_URI, options)
+        await client.connect()
+
+        const sheet = await client.db('CharacterCheck').collection('Sheets').findOne({ _id: ObjectId(sheetId) })
+
+        if (!sheet) {
+        return res.status(404).json({ error: 'Sheet not found' })
+        }
+
+        res.status(200).json(sheet)
+    } catch (error) {
+        console.error('Error fetching sheet details:', error)
+        res.status(500).json({ error: 'Internal server error', details: error.message })
+    }
+}
+
+const sendPasswordRecoveryEmail = async (req, res) => {
+    const { email } = req.body
+
+    if (!email) {
+        return res.status(400).json({ error: 'Email is required' })
+    }
+
+    const temporaryPassword = generateTemporaryPassword()
+
+    try {
+        const client = new MongoClient(MONGO_URI, options)
+        await client.connect()
+
+        const user = await client.db('CharacterCheck').collection('Accounts').findOne({ email })
+
+        if (!user) {
+            return res.status(404).json({ error: 'Account not found' })
+        }
+
+        await client.db('CharacterCheck').collection('Accounts').updateOne({ email }, { $set: { temporaryPassword } })
+        sendRecoveryEmail(email, temporaryPassword)
+
+        res.status(200).json({ message: 'Recovery email sent successfully' })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error' })
+    }
+}
+
+const forgotPassword = async (req, res) => {
+    const { userEmail } = req.body;
+
+    if (!userEmail) {
+        return res.status(400).json({ error: 'Email is required' })
+    }
+
+    try {
+        const client = new MongoClient(MONGO_URI, options)
+        await client.connect()
+
+        const user = await client.db('CharacterCheck').collection('Accounts').findOne({ userEmail })
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' })
+        }
+
+        const temporaryPassword = generateTemporaryPassword()
+
+        res.status(200).json({ message: 'Temporary password generated and sent successfully' })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error' })
+    }
+}
+
+module.exports = { 
+getRaces, 
+getSpecificRace, 
+getSpecificSubrace, 
+getSpecificTrait, 
+registerUser, 
+loginUser, 
+saveCharacterSheet, 
+getSheetsByUserId, 
+getSheetDetails, 
+sendPasswordRecoveryEmail, 
+forgotPassword
+}
