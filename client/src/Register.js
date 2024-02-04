@@ -6,6 +6,8 @@ import backgroundImage from "./Backgrounds/homepagebackground.jpg"
 const Register = () => {
     const [ account, setAccount ] = useState("")
     const [ userPassword, setUserPassword ] = useState("")
+    const [ userEmail, setUserEmail ] = useState("")
+    const [ showPassword, setShowPassword ] = useState(false)
     const navigate = useNavigate()
 
     const handleHomeButtonClick = () => {
@@ -23,9 +25,9 @@ const Register = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ account, userPassword })
+                body: JSON.stringify({ account, userPassword, userEmail })
             })
-
+    
             if (response.ok) {
                 console.log("registered successfully")
                 navigate("/login")
@@ -41,13 +43,17 @@ const Register = () => {
         <Wrapper>
             <h1>Sign Up Page</h1>
             <label>Account Name: <input type="text" value={account} onChange={(event) => setAccount(event.target.value)} /></label>
-            <label>Password: <input type="password" value={userPassword} onChange={(event) => setUserPassword(event.target.value)} /></label>
+            <label>Password: <input type={showPassword ? "text" : "password"} value={userPassword} onChange={(event) => setUserPassword(event.target.value)} /></label>
+            <button onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? "Hide Password" : "Show Password"}
+            </button>
+            <label>Email: <input type="text" value={userEmail} onChange={(event) => setUserEmail(event.target.value)} /></label>
             <button onClick={handleRegister}>Register</button>
             <p>Already have an account? <LoginButton onClick={handleLoginButtonClick}>Login</LoginButton></p>
             <HomeButton onClick={handleHomeButtonClick}>Home</HomeButton>
         </Wrapper>
-    );
-};
+    )
+}
 
 const Wrapper = styled.div`
 background-image: url(${backgroundImage});
