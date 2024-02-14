@@ -4,7 +4,9 @@ export default createGlobalStyle`
 :root {
     --color-silver: linear-gradient( 45deg, #999 5%, #fff 10%, #ccc 30%, #ddd 50%,#ccc 70%, #fff 80%, #999 95%);
     --color-gold: linear-gradient( 45deg, #ffd700 7%,  #fff 17%, #ffd700 30%, #ffd700 50%, #ffd700 60%, #fff 75%, #ffd700 95% );
-    
+    button {
+        cursor: pointer;
+    }
 }
 
 

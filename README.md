@@ -1,7 +1,8 @@
 # Character-Check
 
-First things first, I had to imagine how to make this idea take shape.
-
+Welcome to character check! This project is a website to facilitate Dnd 5th edition character sheet managing. I have no intention on making this website a paid service at the moment.
+Unless a lot of progress is made on the site where there are features that could be paid for, the core uses of the site will remain free. Any revenue would be from ads on the side or bottom, official
+affiliation and donations, if ever.
 
 ## The Calculator
 
@@ -22,3 +23,30 @@ then becomes 0 when the stat is at 10, it becomes +1 when it reaches 12, +2 when
 This number influences the majority of the character sheet's values and how the game is then played for this user.
 
 It takes into concideration a number of variables. The starting number of 8 ( that base rule i was talking about again), then adds whatever bonus are granted by the selected race ( and sometimes subrace ) and then finally add the number of points added by the user using the point buy system. It then calculates that Ability modifer that i mentioned earlier. It is important to note that the bonus points obtained from your race are added at the end and do not influence the "price" of the point buy system. They do influence the end result of the modifer nonetheless.
+
+## The Sheet Making/using
+
+All the information entered on the form are stored on the backend under a collection with a matching id to the user who made the sheet. This makes it so only the creator of the sheet is able to access it and then modify it after loading it. the information modified are then patched in over the old ones and the sheet is updated on mongo directly. This facilitates the use of the character sheet which need to be constantly used during play and constantly adjusted as the game progresses. As of right now, the sheet is fully useable but there are many more features that i plan on adding. For exemple, better interface for the inventory,, the weapon actions and character traits/feature that have a number of uses per long/short rests. Also i plan on adding a full encyclopedia of spells, reatures, classes, races, subraces, subclasses, items, creatures, ect..
+
+As of right now, this is a form that needs to be filled out automatically. Later on, users will be able to use the calculator in conjonction with the sheet maker. in the sens that the values for character stats made in the calculator will be able to be used right away in the character stats section of the sheet form and all field that are relevant to these will be filled out automatically while still being adjustable for any case where any other object, traits or anything else influences those numbers.
+
+The user can also view the list of sheets that they have and chose to delete them from the Sheetloader Component.
+
+For what the components are at this moment, they are fully working and can already be a good upgrade from the pen and paper alternative for people who prefer a digital approach to their game sheets.
+
+## The login/registering
+
+The users can register on this site easily by entering a username, password and email. The email has no use at the moment but a password/username recovery system will be implemented in the near future.
+The password must be longer than 8 characters but shorter than 20. The security of the site is low at the moment but password encryption and stricter requirements for password and usernames will be added in the future.
+
+## Things that will be done after Submiting:
+
+- Encyclopedia
+- Better UI for sheet
+
+### Things left to be done before submiting:
+
+- finish styling
+- ReadMe
+- MAKE SURE CODE IS MINE (style wise)
+- PPT
