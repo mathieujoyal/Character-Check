@@ -7,11 +7,53 @@ import divbackgroundImage from "./Backgrounds/divbackground.png"
 const Homepage = () => {
     const navigate = useNavigate()
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [usernameToDelete, setUsernameToDelete] = useState('');
+    const [deleteError, setDeleteError] = useState('');
 
     useEffect(() => {
     const storedLoggedInStatus = localStorage.getItem("isLoggedIn")
     setIsLoggedIn(storedLoggedInStatus === "true")
 }, [])
+
+const handleDeleteAccount = async () => {
+    try {
+        const userId = localStorage.getItem('userId');
+        const response = await fetch("/api/delete-account", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username: usernameToDelete, loggedInUserId: userId })
+        });
+
+        if (response.ok) {
+            console.log("Account deleted successfully");
+            localStorage.removeItem("userId");
+            localStorage.removeItem("account");
+            localStorage.removeItem("isLoggedIn");
+            setUsernameToDelete('');
+            setShowDeleteModal(false);
+            window.location.reload();
+        } else {
+            setDeleteError("Failed to delete account");
+        }
+    } catch (error) {
+        console.error("Error during account deletion:", error);
+        setDeleteError("Failed to delete account");
+    }
+};
+
+const openDeleteModal = () => {
+    setShowDeleteModal(true);
+    setUsernameToDelete('');
+    setDeleteError('');
+};
+
+const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+};
+
 
 const handleCreateCharButtonClick = () => {
     if (isLoggedIn) {
@@ -57,6 +99,23 @@ const handleLoadCharButtonClick = () => {
             </SheetManagmentDiv>
             <CalculatorButton onClick={handleCalculatorButtonClick}> Point-buy Calculator </CalculatorButton>
             <EncyclopediaButton onClick={handleEncyclopediaButtonClick}> Encyclopedia </EncyclopediaButton>
+            {isLoggedIn && (
+                <button onClick={openDeleteModal}>Delete Account</button>
+            )}
+            {showDeleteModal && (
+                <div>
+                    <p>Are you sure you want to delete your account?</p>
+                    <input
+                        type="text"
+                        placeholder="Enter your username"
+                        value={usernameToDelete}
+                        onChange={(e) => setUsernameToDelete(e.target.value)}
+                    />
+                    {deleteError && <p>{deleteError}</p>}
+                    <button onClick={handleDeleteAccount}>Delete</button>
+                    <button onClick={closeDeleteModal}>Cancel</button>
+                </div>
+            )}
         </Wrapper>
     )
 }

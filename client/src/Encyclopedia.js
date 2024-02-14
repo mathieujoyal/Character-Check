@@ -37,9 +37,13 @@ margin: 10px;
 const HomeButton = styled.button`
 border: 3px solid rgb(25,25,25);
 background-color: rgb(200,0,0);
-padding: 10px 20px;
+padding: 5px 20px;
+margin-right: 20px;
 box-shadow: inset 0px -0px 0px 5px rgb(150,0,0);
 transition: 0.12s;
+font-family: 'Tangerine', cursive;
+font-size: 30px;
+font-weight: bold;
 &:active{
     box-shadow: inset 0px -0px 0px 5px rgb(125,0,0);
     background-color: rgb(100,0,0);

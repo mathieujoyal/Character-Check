@@ -8,13 +8,16 @@ getRaces,
 getSpecificRace, 
 getSpecificSubrace, 
 getSpecificTrait, 
+
 registerUser, 
 loginUser, 
-saveCharacterSheet, 
-getSheetsByUserId, 
+deleteAccount,
+
 getSheetDetails, 
-sendPasswordRecoveryEmail, 
-forgotPassword
+getSheetsByUserId,
+saveCharacterSheet,
+updateCharacterSheet,
+deleteCharacterSheet
 } = require("./handlers")
 
 express()
@@ -36,38 +39,32 @@ express()
 })
 
 .get("/api/races/:raceName", getSpecificRace)
-
 .get("/api/subraces/:subraceName", getSpecificSubrace)
-
 .get("/api/traits/:trait", getSpecificTrait)
 
+.post("/api/register", registerUser)
+.post("/api/login", loginUser)
+.delete("/api/delete-account", deleteAccount)
+
+.get('/api/sheets/details/:sheetId', getSheetDetails)
 .get("/api/sheets/:userId", async (req, res) => {
     const userId = req.params.userId
-
     try {
         const sheets = await getSheetsByUserId(userId)
         if (!sheets) {
             return res.status(404).json({ error: 'User not found' })
         }
-
         res.status(200).json(sheets)
     } catch (error) {
-        console.error('Error fetching sheets:', error)
-        res.status(500).json({ error: 'Internal server error' })
+        console.error('Error when fetching sheets:', error)
+        res.status(500).json({ error: 'Invalid Request' })
     }
 })
-
-.get('/api/sheets/details/:sheetId', getSheetDetails)
-
 .post('/api/sheets', saveCharacterSheet)
+.patch('/api/sheets/:sheetId', updateCharacterSheet)
+.delete("/api/delete-sheet/:sheetId", deleteCharacterSheet)
 
-.post("/api/register", registerUser)
 
-.post("/api/login", loginUser)
-
-.post("/api/password-recovery", sendPasswordRecoveryEmail)
-
-.post('/api/forgotPassword', forgotPassword)
 
 //-------------------------------------------------//
     // Add my endpoints over this line.

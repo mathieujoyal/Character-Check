@@ -37,7 +37,7 @@ const Header = () => {
             <H1>Character Check</H1>
             {isLoggedIn ? (
                 <UserInfo>
-                    <span>Hello, {account}!</span>
+                    <span>{account}</span>
                     <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
                 </UserInfo>
             ) : (
@@ -62,8 +62,9 @@ height: 70px;
 `
 
 const H1 = styled.h1`
-font-size: 40px;
-color: lightgray;
+margin-top:15px ;
+font-size: 60px;
+color: rgb(200,0,0) ;
 `
 
 const ButtonDiv = styled.div`
@@ -72,11 +73,35 @@ right: 0px;
 `
 
 const Login = styled.button`
-
+border: 3px solid rgb(25,25,25);
+background-color: rgb(200,0,0);
+padding: 5px 20px;
+margin-right: 20px;
+box-shadow: inset 0px -0px 0px 5px rgb(150,0,0);
+transition: 0.12s;
+font-family: 'Tangerine', cursive;
+font-size: 30px;
+font-weight: bold;
+&:active{
+    box-shadow: inset 0px -0px 0px 5px rgb(125,0,0);
+    background-color: rgb(100,0,0);
+}
 `
 
 const Register = styled.button`
-
+border: 3px solid rgb(25,25,25);
+background-color: rgb(200,0,0);
+padding: 5px 20px;
+margin-right: 20px;
+box-shadow: inset 0px -0px 0px 5px rgb(150,0,0);
+transition: 0.12s;
+font-family: 'Tangerine', cursive;
+font-size: 30px;
+font-weight: bold;
+&:active{
+    box-shadow: inset 0px -0px 0px 5px rgb(125,0,0);
+    background-color: rgb(100,0,0);
+}
 `
 
 const UserInfo = styled.div`
@@ -85,12 +110,26 @@ font-size: 16px;
 
 span {
     margin-right: 10px;
+    position: absolute;
+    top: 15px;
+    right: 100px;
+    font-size: 40px;
+    font-weight: bold;
 }
 `
 
 const LogoutButton = styled.button`
 background: none;
 border: none;
+position: absolute;
+padding: 10px 10px;
+border: 3px solid rgb(25,25,25);
+background-color: rgb(200,0,0);
+box-shadow: inset 0px -0px 0px 5px rgb(150,0,0);
+top: 5px;
+right: 10px;
+font-size: 30px;
+font-family: 'Tangerine', cursive;
 color: lightgray;
 cursor: pointer;
 `

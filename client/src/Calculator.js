@@ -315,13 +315,14 @@ margin-left: 100px;
 `
 
 const AttributeDiv = styled.div`
-display: flex;
-align-items: center;
+display: grid;
+grid-template-columns: 150px 20px 400px 50px;
+text-align: center;
 margin-bottom: 10px;
 `
 
 const Attribute = styled.div`
-margin-right: 10px;
+margin: auto;
 `
 
 const StatValue = styled.div`
@@ -333,17 +334,15 @@ margin-left: 10px;
 const StatModifier = styled.span`
 font-size: 35px;
 font-weight: bold;
+margin-right: 20px;
 `
 
 const MinusButton = styled.button`
-background: var(--color-gold);
-cursor:pointer;
+background: var(--color-silver);
+cursor: pointer;
 transition: 0.2s;
-box-shadow: 0 4px 8px rgba(218, 165, 32, 0.5), 0 0 20px rgba(255, 215, 0, 0.5);
-border: none;
 &:hover{
-    box-shadow: 0 1px 2px rgba(218, 165, 32, 0.5), 0 0 4px rgba(255, 215, 0, 0.5);
-    filter: brightness(90%)
+    opacity: 70%;
 }
 `
 
@@ -353,7 +352,6 @@ cursor: pointer;
 transition: 0.2s;
 &:hover{
     opacity: 70%;
-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 `
 
@@ -380,23 +378,25 @@ margin-left: 10px;
 const RaceInfoContainer = styled.div`
 background-image: url(${divbackgroundImage});
 border: 2px solid #ccaa00;
+height: fit-content;
 box-shadow: 0px 5px 12px 5px black;
 color: white;
 margin: 30px;
+padding: 15px;
 `
 
 const SubRaceInfoContainer = styled.div`
 background-image: url(${divbackgroundImage});
 border: 2px solid #ccaa00;
 box-shadow: 0px 5px 12px 5px black;
-height: 70px;
+height: fit-content;
 color: white;
-min-height: 270px;
+padding: 15px;
 margin: 30px;
 `
 
 const H2 = styled.h2`
-
+margin-top: 15px;
 `
 
 const Para = styled.p`
@@ -405,10 +405,23 @@ margin: 10px 0px;
 
 const BoldSpan = styled.span`
 font-weight: bold;
+text-decoration: underline;
 `
 
 const HomeButton = styled.button`
-
+border: 3px solid rgb(25,25,25);
+background-color: rgb(200,0,0);
+padding: 5px 20px;
+margin-right: 20px;
+box-shadow: inset 0px -0px 0px 5px rgb(150,0,0);
+transition: 0.12s;
+font-family: 'Tangerine', cursive;
+font-size: 30px;
+font-weight: bold;
+&:active{
+    box-shadow: inset 0px -0px 0px 5px rgb(125,0,0);
+    background-color: rgb(100,0,0);
+}
 `
 
 export default Calculator
