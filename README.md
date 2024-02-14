@@ -48,5 +48,4 @@ The password must be longer than 8 characters but shorter than 20. The security 
 
 - finish styling
 - ReadMe
-- MAKE SURE CODE IS MINE (style wise)
 - PPT
