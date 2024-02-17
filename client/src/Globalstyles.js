@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import backgroundImage from "./Backgrounds/homepagebackground.jpg"
 
 export default createGlobalStyle`
 :root {
@@ -6,6 +7,9 @@ export default createGlobalStyle`
     --color-gold: linear-gradient( 45deg, #ffd700 7%,  #fff 17%, #ffd700 30%, #ffd700 50%, #ffd700 60%, #fff 75%, #ffd700 95% );
     button {
         cursor: pointer;
+    }
+    body {
+        background-image: url(${backgroundImage});
     }
 }
 

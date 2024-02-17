@@ -12,7 +12,7 @@ const Login = () => {
     const [ userPassword, setUserPassword ] = useState("")
 
     const navigate = useNavigate()
-
+    
     useEffect(() => {
         const storedLoggedInStatus = localStorage.getItem("isLoggedIn")
         setIsLoggedIn(storedLoggedInStatus === "true")
@@ -27,10 +27,6 @@ const Login = () => {
 
     const handleHomeButtonClick = () => {
         navigate("/")
-    }
-
-    const handleForgotPassword = () => {
-        navigate("/password-recovery")
     }
 
     const handleLogin = async () => {
@@ -86,7 +82,6 @@ const Login = () => {
             <LoginButton onClick={handleLogin}>Login</LoginButton>
             <ErrorMessage className={errorBox ? "show" : "hide"}>Invalid Account name or Password.</ErrorMessage>
             <p>Don't have an account?</p><RegisterButton onClick={handleRegisterButtonClick}>Register</RegisterButton>
-            <ForgotPasswordButton onClick={handleForgotPassword}>Forgot your account/password?</ForgotPasswordButton>
             <HomeButton onClick={handleHomeButtonClick}>Home</HomeButton>
         </Wrapper>
     )
@@ -184,28 +179,13 @@ font-weight: bold;
 }
 `
 
-const ForgotPasswordButton = styled.button`
-border: 3px solid rgb(25,25,25);
-background-color: rgb(200,0,0);
-padding: 10px 20px;
-box-shadow: inset 0px -0px 0px 5px rgb(150,0,0);
-margin: 20px 0px;
-transition: 0.12s;
-font-family: 'Tangerine', cursive;
-font-size: 30px;
-font-weight: bold;
-&:active{
-    box-shadow: inset 0px -0px 0px 5px rgb(125,0,0);
-    background-color: rgb(100,0,0)
-}
-`
-
 const HomeButton = styled.button`
 border: 3px solid rgb(25,25,25);
 background-color: rgb(200,0,0);
 padding: 5px 20px;
 box-shadow: inset 0px -0px 0px 5px rgb(150,0,0);
 transition: 0.12s;
+margin-top:15px;
 font-family: 'Tangerine', cursive;
 font-size: 30px;
 font-weight: bold;
@@ -219,7 +199,10 @@ const ErrorMessage = styled.p`
 color: red;
 margin-top: 10px;
 display: none;
-
+padding: 15px;
+margin: 10px;
+background-color:  black;
+border: 2px solid rgb(50,50,50);
 &.show {
     display: block;
 }

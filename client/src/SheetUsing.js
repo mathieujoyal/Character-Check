@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import { useNavigate } from "react-router"
 import styled from 'styled-components'
 import backgroundImage from "./Backgrounds/homepagebackground.jpg"
-import divbackgroundImage from "./Backgrounds/divbackground.png"
 
 const SheetUsing = () => {
   const { sheetId } = useParams()
@@ -218,17 +217,6 @@ padding-top: 30px;
 box-shadow: inset 0px 20px 12px 2px black;
 `
 
-const SheetDiv = styled.div`
-background-image: url(${divbackgroundImage});
-background-position: center;
-display: flex;
-flex-direction: column;
-padding: 10px;
-align-items: center;
-padding-top: 30px;
-border: 2px solid #ccaa00;
-`
-
 const ErrorMessage = styled.p`
 position: fixed;
 left: 40%;
@@ -247,6 +235,17 @@ background-color: #4CAF50;
 color: white;
 padding: 15px 25px;
 border-radius: 5px;
+`
+
+const SheetDiv = styled.div`
+background-color: black;
+background-position: center;
+display: flex;
+flex-direction: column;
+padding: 10px;
+align-items: center;
+padding-top: 30px;
+border: 2px solid #ccaa00;
 `
 
 const InputSmall = styled.input`
@@ -283,6 +282,7 @@ const InputBig = styled.textarea`
 height: 200px;
 width: 450px;
 margin: 10px auto;
+text-align: center;
 `
 
 const DeathSaveInput = styled.textarea`
@@ -297,6 +297,7 @@ const InputBIGGER = styled.textarea`
 height: 265px;
 width: 450px;
 margin: 10px auto;
+text-align: center;
 `
 
 const LabelSmall = styled.label`
@@ -322,6 +323,13 @@ margin: 5px;
 text-align: center;
 `
 
+const Sidediv =styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+`
+
 const TopSkillDiv = styled.div`
 border: 2px solid #ccaa00;
 padding: 5px;
@@ -332,13 +340,6 @@ justify-content: center;
 margin-left: 20px;
 width: 200px;
 margin-top: 10px;
-`
-
-const Sidediv =styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
 `
 
 const StatsandSkillsDiv = styled.div`
@@ -418,6 +419,8 @@ display: flex;
 flex-direction: column;
 align-items: left;
 justify-content: center;
+padding-top: 8px;
+padding-left: 5px;
 margin-left: 20px;
 width: 200px;
 `

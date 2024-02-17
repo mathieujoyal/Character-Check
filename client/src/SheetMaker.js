@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router"
 import styled from 'styled-components'
 import backgroundImage from "./Backgrounds/homepagebackground.jpg"
-import divbackgroundImage from "./Backgrounds/divbackground.png"
 
 const SheetMaker = () => {
     const navigate = useNavigate()
 
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [characterData, setCharacterData] = useState({
+    const [ showSuccessMessage, setShowSuccessMessage ] = useState(false)
+    const [ pageBlur, setPageBlur ] = useState(false) // Unimplemented, Needs to be finalized
+    const [ errorMessage, setErrorMessage ] = useState('')
+    const [ characterData, setCharacterData ] = useState({
         characterName: "",
         characterClass: "",
         subclass: "",
@@ -81,22 +81,22 @@ const SheetMaker = () => {
         }, [navigate])
 
     const handleInputChange = (field, value) => {
-    setCharacterData((prevData) => ({ ...prevData, [field]: value }));
+    setCharacterData((prevData) => ({ ...prevData, [field]: value }))
 }
 
 const saveCharacterSheet = async () => {
     try {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId')
         if (!userId) {
-            navigate('/login');
-            return;
+            navigate('/login')
+            return
         }
 
         if (!characterData.characterName.trim()) {
-            setErrorMessage('Character Name is required');
+            setErrorMessage('Character Name is required')
         setTimeout(() => {
-            setErrorMessage('');
-        }, 3000);
+            setErrorMessage('')
+        }, 3000)
     }
         const response = await fetch('/api/sheets', {
             method: 'POST',
@@ -108,23 +108,24 @@ const saveCharacterSheet = async () => {
                 userId,
                 ...characterData
             })
-        });
+        })
 
         if (response.ok) {
-            const sheetData = await response.json();
-            setShowSuccessMessage(true);
+            setShowSuccessMessage(true)
+            setPageBlur(true)
             setTimeout(() => {
-                setShowSuccessMessage(false);
-            }, 3000);
-            console.log('Character sheet saved successfully');
-            console.log('SheetId:', sheetData.sheetId);
+                setShowSuccessMessage(false)
+                setPageBlur(false)
+                navigate('/')
+            }, 3000)
+            
         } else {
-            console.error('Failed to save character sheet');
+            console.error('Failed to save character sheet')
         }
     } catch (error) {
-        console.error('Error during sheet save:', error);
+        console.error('Error during sheet save:', error)
     }
-};
+}
 
     const handleHomeButtonClick = () => {
         navigate('/')
@@ -242,7 +243,7 @@ const saveCharacterSheet = async () => {
                     <InputBig type="text" onChange={(event) => handleInputChange('inventory', event.target.value)} />
                 </ActionDiv>
 
-                <SpellButton>SpellList and slots? INACTIVE</SpellButton>
+                <SpellButton>inactive || SpellList and slots || inactive</SpellButton>
             </PhysicalDiv>
 
             <MentalDiv>
@@ -272,10 +273,11 @@ flex-direction: column;
 align-items: center;
 padding-top: 30px;
 box-shadow: inset 0px 20px 12px 2px black;
+
 `
 
 const SheetDiv = styled.div`
-background-image: url(${divbackgroundImage});
+background-color: rgb(25,25,25);
 background-position: center;
 display: flex;
 flex-direction: column;
@@ -283,6 +285,7 @@ padding: 10px;
 align-items: center;
 padding-top: 30px;
 border: 2px solid #ccaa00;
+opacity: ${({ pageBlur }) => pageBlur ? "0.7" : "1"};
 `
 
 const ErrorMessage = styled.p`
@@ -339,6 +342,7 @@ const InputBig = styled.textarea`
 height: 200px;
 width: 450px;
 margin: 10px auto;
+text-align: center;
 `
 
 const DeathSaveInput = styled.textarea`
@@ -353,6 +357,7 @@ const InputBIGGER = styled.textarea`
 height: 265px;
 width: 450px;
 margin: 10px auto;
+text-align: center;
 `
 
 const LabelSmall = styled.label`
@@ -440,7 +445,7 @@ margin-bottom: 10px;
 `
 
 const InputBottomLeft = styled.textarea`
-width: 200px;
+width: 300px;
 height: 100px;
 display: flex;
 flex-direction: column;
@@ -473,6 +478,8 @@ border: 2px solid #ccaa00;
 display: flex;
 flex-direction: column;
 align-items: left;
+padding-top: 8px;
+padding-left: 5px;
 justify-content: center;
 margin-left: 20px;
 width: 200px;

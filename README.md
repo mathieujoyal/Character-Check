@@ -6,19 +6,12 @@ affiliation and donations, if ever.
 
 ## The Calculator
 
-This is a Calculator for D&D 5th edition that uses the most populator character stats building logic known as: Point buy.
-The way it works is that all 6 "Ability", "attributes" or "stats" (strength, dexterity, constitution, intelligence, wisdom and
-charisma"), start at a base of 8 and cannot be lowered more than that nor can it be increased to more than 15 when creating a
-character. (This is subject to change depending on who the user is playing with but since this is a majorly accepted rule in 
-the universe of Dungeons and dragons (D&D), this website uses that restriction.) The users can then add or subtract points to
-any attribute they wish to increase/decrease as they wish until they have spent all 27 of their starting points. (Again, this
-rule is  subject to change but 27 is the normally accepted number as rules stand but as i mentionned, depending on who the 
-user is playing with. This website sticks to the most commonly accepted rules.) If an attribute/stat is at 13 and is increased
-to 14 or if it is at 14 and increased to 15, then the remaining points is lowered by 2 instead of 1. Revesersably, if it is at
-15  and it is decreased to 14 or if it is at 14 and is decreased to 13, then the remaining points will go up by 2 instead of 1.
+This is a Calculator for D&D 5th edition that uses the most populator character stats building logic known as: Point buy. The way it works is that all 6 "Ability", "attributes" or "stats" (strength, dexterity, constitution, intelligence, wisdom and charisma"), start at a base of 8 and cannot be lowered more than that nor can it be increased to more than 15 when creating a character. (This is subject to change depending on who the user is playing with but since this is a majorly accepted rule in the universe of Dungeons and dragons (D&D), this website uses that restriction.) The users can then add or subtract points to any attribute they wish to increase/decrease as they wish until they have spent all 27 of their starting points. (Again, this rule is  subject to change but 27 is the normally accepted number as rules stand but as i mentionned, depending on who the user is playing with. This website sticks to the most commonly accepted rules.) If an attribute/stat is at 13 and is increased to 14 or if it is at 14 and increased to 15, then the remaining points is lowered by 2 instead of 1. Revesersably, if it is at 15  and it is decreased to 14 or if it is at 14 and is decreased to 13, then the remaining points will go up by 2 instead of 1.
 
 The Ability Modifier is a very important number to keep in mind when creating a character. Most people rely on THAT specific
+
 Number/concept in focus and base their entire point spending around it. At the base of 8, the modifier is -1. The modifier 
+
 then becomes 0 when the stat is at 10, it becomes +1 when it reaches 12, +2 when it reaches 14, at 16 it is +3, ect..
 This number influences the majority of the character sheet's values and how the game is then played for this user.
 
@@ -34,18 +27,24 @@ The user can also view the list of sheets that they have and chose to delete the
 
 For what the components are at this moment, they are fully working and can already be a good upgrade from the pen and paper alternative for people who prefer a digital approach to their game sheets.
 
+These components use mongo for storing the sheets in their own collection which is linked to the user who made the sheets. These sheets contain around 60 fields of information which are entered by the user, saved as a new character sheet on mongo and can then be loaded in the sheetloader components to then be either deleted from the user's account and sheet collection permanently or to be used to modify either during play or after outside of a game session. The information changed is patched onto the mongo sheet using the sheet ID and those changes are kept when the user comes back to the sheet later on.
+
 ## The login/registering
 
 The users can register on this site easily by entering a username, password and email. The email has no use at the moment but a password/username recovery system will be implemented in the near future.
 The password must be longer than 8 characters but shorter than 20. The security of the site is low at the moment but password encryption and stricter requirements for password and usernames will be added in the future.
 
+As of right now, Users can make an account and delete said account from the home page. The deletion requires to type their username as confrimation and then confirm the deletion. It is stored and remove directly in the mongo account collection. 
+
+
 ## Things that will be done after Submiting:
 
 - Encyclopedia
+- Spells and slots
+- inventory
+- Stats be influenced by inventory and features automatically
 - Better UI for sheet
 
 ### Things left to be done before submiting:
 
-- finish styling
-- ReadMe
-- PPT
+- make sure textareas are not resizeable
