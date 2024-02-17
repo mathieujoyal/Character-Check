@@ -1,0 +1,3 @@
+[submodule "Character-CheckHosting"]
+	path = Character-CheckHosting
+	url = https://github.com/mathieujoyal/Character-CheckHosting

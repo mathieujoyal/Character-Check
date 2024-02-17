@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "proxy": "http://localhost:4000/",
+  "webhost": "/* https://character-check-hosting.onrender.com */",
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",

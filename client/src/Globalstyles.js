@@ -1,9 +1,16 @@
 import { createGlobalStyle } from "styled-components";
+import backgroundImage from "./Backgrounds/homepagebackground.jpg"
 
 export default createGlobalStyle`
 :root {
     --color-silver: linear-gradient( 45deg, #999 5%, #fff 10%, #ccc 30%, #ddd 50%,#ccc 70%, #fff 80%, #999 95%);
     --color-gold: linear-gradient( 45deg, #ffd700 7%,  #fff 17%, #ffd700 30%, #ffd700 50%, #ffd700 60%, #fff 75%, #ffd700 95% );
+    button {
+        cursor: pointer;
+    }
+    body {
+        background-image: url(${backgroundImage});
+    }
 }
 
 
@@ -20,11 +27,12 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
+    font-family: 'Tangerine', cursive;
     margin: 0;
     padding: 0;
     border: 0;
     box-sizing: border-box;
-    font-size: 100%;
+    font-size: 30px;
     vertical-align: baseline;
     color: white;
 }

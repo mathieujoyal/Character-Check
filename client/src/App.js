@@ -9,6 +9,7 @@ import Login from "./Login"
 import Register from "./Register"
 import SheetMaker from "./SheetMaker"
 import SheetLoader from "./SheetLoader"
+import SheetUsing from "./SheetUsing"
 
 const App = () => {
 
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/register" element={<Register />}/>
         <Route path="/sheetmaker" element={<SheetMaker />}/>
         <Route path="/sheetloader" element={<SheetLoader />}/>
+        <Route path="/sheetUsing/:sheetId" element={<SheetUsing />} />
       </Routes>
     </BrowserRouter>
   );
