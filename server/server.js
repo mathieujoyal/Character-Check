@@ -26,7 +26,7 @@ express()
 
     .use(express.static("public"))
 
-    // Add my endpoints under this line.
+// Add my endpoints under this line.
 //-------------------------------------------------//
 
 .get("/api/races", async (req, res) => {
@@ -34,7 +34,7 @@ express()
         const races = await getRaces()
         res.json(races)
     } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" })
+        res.status(500).json({ error: "Server Error" })
     }
 })
 
@@ -64,10 +64,8 @@ express()
 .patch('/api/sheets/:sheetId', updateCharacterSheet)
 .delete("/api/delete-sheet/:sheetId", deleteCharacterSheet)
 
-
-
 //-------------------------------------------------//
-    // Add my endpoints over this line.
+// Add my endpoints over this line.
 
     .get("*", (req, res) => {
         res.status(404).json({

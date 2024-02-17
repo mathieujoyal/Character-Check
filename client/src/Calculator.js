@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import styled from "styled-components"
 import backgroundImage from "./Backgrounds/homepagebackground.jpg"
-import divbackgroundImage from "./Backgrounds/divbackground.png"
-
 
 const Calculator = () => {
 const stats = [ "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma" ]
@@ -19,7 +17,6 @@ const [ raceInfo, setRaceInfo ] = useState(null)
 const [ availablePoints, setAvailablePoints ] = useState(27)
 const [ statPoints, setStatPoints ] = useState({ strength: 8, dexterity: 8, constitution: 8, intelligence: 8, wisdom: 8, charisma: 8 })
 const [ calculatedStatPoints, setCalculatedStatPoints ] = useState({ strength: 8, dexterity: 8, constitution: 8, intelligence: 8, wisdom: 8, charisma: 8 })
-
 
 useEffect(() => {
     fetch("/api/races")
@@ -296,8 +293,8 @@ font-size: 40px;
 `
 
 const StatContainer = styled.div`
-background-image: url(${divbackgroundImage});
-border: 2px solid #ccaa00;
+background-color: black;
+border: 2px solid rgb(120,0,0);
 box-shadow: 0px 5px 12px 5px black;
 color: white;
 min-height: 300px;
@@ -376,8 +373,8 @@ margin-left: 10px;
 `
 
 const RaceInfoContainer = styled.div`
-background-image: url(${divbackgroundImage});
-border: 2px solid #ccaa00;
+background-color: black;
+border: 2px solid rgb(120,0,0);
 height: fit-content;
 box-shadow: 0px 5px 12px 5px black;
 color: white;
@@ -386,8 +383,8 @@ padding: 15px;
 `
 
 const SubRaceInfoContainer = styled.div`
-background-image: url(${divbackgroundImage});
-border: 2px solid #ccaa00;
+background-color: black;
+border: 2px solid rgb(120,0,0);
 box-shadow: 0px 5px 12px 5px black;
 height: fit-content;
 color: white;
@@ -412,7 +409,7 @@ const HomeButton = styled.button`
 border: 3px solid rgb(25,25,25);
 background-color: rgb(200,0,0);
 padding: 5px 20px;
-margin-right: 20px;
+margin-bottom: 10px;
 box-shadow: inset 0px -0px 0px 5px rgb(150,0,0);
 transition: 0.12s;
 font-family: 'Tangerine', cursive;

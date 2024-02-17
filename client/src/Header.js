@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import styled from "styled-components"
 import backgroundImage from "./Backgrounds/divbackground.png"
+import Logo from "./Backgrounds/Logo.png"
 
 const Header = () => {
     const navigate = useNavigate()
@@ -34,7 +35,7 @@ const Header = () => {
 
     return (
         <Wrapper>
-            <H1>Character Check</H1>
+            <Img src={Logo}/>
             {isLoggedIn ? (
                 <UserInfo>
                     <span>{account}</span>
@@ -61,10 +62,8 @@ box-shadow: 0px 5px 12px 5px black;
 height: 70px;
 `
 
-const H1 = styled.h1`
-margin-top:15px ;
-font-size: 60px;
-color: rgb(200,0,0) ;
+const Img = styled.img`
+width: 500px;
 `
 
 const ButtonDiv = styled.div`

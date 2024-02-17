@@ -146,7 +146,7 @@ const getSheetDetails = async (req, res) => {
         res.status(200).json(sheet)
     } catch (error) {
         console.error('Error fetching sheet details:', error)
-        res.status(500).json({ error: 'Server error', details: error.message })
+        res.status(500).json({ error: 'Server error' })
     }
 }
 
@@ -205,14 +205,13 @@ const updateCharacterSheet = async (req, res) => {
             { $set: { ...updatedCharacterData, _id: ObjectId(sheetId) } }
         )
         await client.close()
-            console.log({ _id: ObjectId(sheetId)})
         if (result.matchedCount === 0) {
         return res.status(404).json({ error: 'Character sheet not found' })
         }
         res.status(200).json({ message: 'Character sheet updated successfully' })
     } catch (error) {
         console.error('Error during sheet update:', error)
-        res.status(500).json({ error: 'Internal server error' })
+        res.status(500).json({ error: 'Server error' })
     }
 }
 

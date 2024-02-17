@@ -8,32 +8,29 @@ const Register = () => {
     const [ userPassword, setUserPassword ] = useState("")
     const [ userEmail, setUserEmail ] = useState("")
     const [ showPassword, setShowPassword ] = useState(false)
-    const [ passwordStrength, setPasswordStrength ] = useState("");
-    const [ registerError, setRegisterError ] = useState("");
-    const [ isPasswordFocused, setIsPasswordFocused ]  = useState(false);
+    const [ passwordStrength, setPasswordStrength ] = useState("")
+    const [ registerError, setRegisterError ] = useState("")
+    const [ isPasswordFocused, setIsPasswordFocused ]  = useState(false)
     const navigate = useNavigate()
 
     const handlePasswordChange = (event) => {
         const password = event.target.value;
-        setUserPassword(password);
+        setUserPassword(password)
+        setIsPasswordFocused(true)
     
         const requirements = [
             password.length < 8 ? <span style={{ color: 'red' }}>Password must be at least 8 characters long.</span> : <span style={{ color: 'green' }}>Password must be at least 8 characters long.</span>,
             password.length > 20 ? <span style={{ color: 'red' }}>Password must be shorter than 20 characters.</span> : <span style={{ color: 'green' }}>Password must be shorter than 20 characters.</span>,
             !/\d|\W/.test(password) ? <span style={{ color: 'red' }}>Password must contain at least one number or special character.</span> : <span style={{ color: 'green' }}>Password must contain at least one number or special character.</span>
-        ];
+        ]
     
-        setPasswordStrength(requirements.map((req, index) => <p key={index}>{req}</p>));
-    };
-
-    const handlePasswordFocus = () => {
-        setIsPasswordFocused(true);
-    };
+        setPasswordStrength(requirements.map((req, index) => <p key={index}>{req}</p>))
+    }
 
     const handlePasswordBlur = () => {
-        setIsPasswordFocused(false);
-        setPasswordStrength("");
-    };
+        setIsPasswordFocused(false)
+        setPasswordStrength("")
+    }
 
     const handleHomeButtonClick = () => {
         navigate("/")
@@ -45,22 +42,18 @@ const Register = () => {
 
     const handleRegister = async () => {
         try {
-
             if (!userEmail) {
-                setRegisterError("Email is required.");
-                return;
+                setRegisterError("Email is required.")
+                return
             }
-
             if (!account) {
-                setRegisterError("Username is required.");
-                return;
+                setRegisterError("Username is required.")
+                return
             }
-
             if (userPassword.length < 8 || userPassword.length > 20 || !/\d|\W/.test(userPassword)) {
-                setRegisterError("Password must be between 8 and 20 characters and contain at least one number or special character.");
-                return;
+                setRegisterError("Password must be between 8 and 20 characters and contain at least one number or special character.")
+                return
             }
-
             const response = await fetch("/api/register", {
                 method: "POST",
                 headers: {
@@ -68,9 +61,7 @@ const Register = () => {
                 },
                 body: JSON.stringify({ account, userPassword, userEmail })
             })
-    
             if (response.ok) {
-                console.log("registered successfully")
                 navigate("/login")
             } else {
                 console.error("register failed")
@@ -87,16 +78,16 @@ const Register = () => {
                 <label>Account Name:</label>
                 <Input placeholder="Create Account Name" type="text" value={account} onChange={(event) => setAccount(event.target.value)} />
                 <label>Password:</label>
-                <div>
-                    <Input placeholder="Create Password" type={showPassword ? "text" : "password"} value={userPassword} onChange={handlePasswordChange} onFocus={handlePasswordFocus} onBlur={handlePasswordBlur} />
-                    {isPasswordFocused && <p>{passwordStrength}</p>}
-                </div>
+                <Passdiv>
+                    <Input placeholder="Create Password" type={showPassword ? "text" : "password"} value={userPassword} onChange={handlePasswordChange} onBlur={handlePasswordBlur} />
+                    {isPasswordFocused && <PassReqDiv><p>{passwordStrength}</p></PassReqDiv>}
+                </Passdiv>
                 <Showpassword onClick={() => setShowPassword(!showPassword)}>
                     {showPassword ? "Hide Password" : "Show Password"}
                 </Showpassword>
                 {registerError && <ErrorText>{registerError}</ErrorText>}
                 <label>Email:</label>
-                <Input placeholder="Enter Password" type="text" value={userEmail} onChange={(event) => setUserEmail(event.target.value)} />
+                <Input type="email" placeholder="Enter Email" value={userEmail} onChange={(event) => setUserEmail(event.target.value)} />
             </InputDiv>
             <RegisterButton onClick={handleRegister}>Register</RegisterButton>
             <p>Already have an account?</p><LoginButton onClick={handleLoginButtonClick}>Login</LoginButton>
@@ -142,10 +133,26 @@ text-align: center;
 border: 3px solid rgb(25,25,25);
 background-color: rgb(120,0,0);
 box-shadow: inset 0px -0px 0px 2px rgb(80,0,0);
-
 &:focus{
     border: 4px solid rgb(100,0,0);
 }
+`
+
+const Passdiv = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+`
+
+const PassReqDiv = styled.div`
+border: 1px solid black;
+padding: 15px;
+margin: 10px;
+background-color:  black;
+border: 2px solid rgb(50,50,50); ;
+position: absolute;
+margin-left: 700px;
 `
 
 const Showpassword = styled.button`
@@ -166,7 +173,15 @@ font-weight: bold;
 `
 
 const ErrorText = styled.p`
-
+color: red;
+margin-top: 10px;
+padding: 15px;
+margin: 10px;
+background-color:  black;
+border: 2px solid rgb(50,50,50);
+&.show {
+    display: block;
+}
 `
 
 const LoginButton = styled.button`
@@ -213,16 +228,6 @@ font-weight: bold;
 &:active{
     box-shadow: inset 0px -0px 0px 5px rgb(125,0,0);
     background-color: rgb(100,0,0);
-}
-`
-
-const ErrorMessage = styled.p`
-color: red;
-margin-top: 10px;
-display: none;
-
-&.show {
-    display: block;
 }
 `
 
